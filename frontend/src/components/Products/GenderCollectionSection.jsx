@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const GenderCollectionSection = () => {
   return (
     <section className='py-16 px-4 lg:px-10'>
-        <div className='coontainer mx-auto flex flex-col md:flex-row gap-8'>
+        <div className='coontainer mx-auto flex flex-col md:flex-row gap-8 md:gap-12'>
             {/* women's collection */}
             <div className="relative flex-1">
                 <img src={womensCollectionImg} alt="Women's Collection" className='w-full h-[350px] md:h[700px] object-cover'/>
