@@ -78,6 +78,21 @@ const ProductDetail = () => {
             </div>
           </div>
 
+          {/* mobile Thumbnail */}
+          <div className="md:hidden flex overflow-x-scroll space-x-4 mb-4">
+          {selectedProduct.images.map((image, index) => (
+              <img
+                key={index}
+                src={image.url}
+                onClick={() => setMainImage(image.url)}
+                alt={image.altText || `Thumbnail ${index}`}
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${
+                  mainImage === image.url ? "border-black" : "border-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+
           {/* Right Side Details */}
           <div className="md:w-1/2 md:ml-10">
             <h1 className="text-2xl md:text-3xl font-semibold mb-2">{selectedProduct.name}</h1>
