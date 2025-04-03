@@ -29,7 +29,7 @@ const Navbar = () => {
         </div>
         {/* right icons */}
         <div className='flex items-center space-x-4'>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase'><CiUser className='h-6 w-6 text-gray-700' /></Link>
+          <Link to="/profile" className='text-gray-700 hover:text-black text-sm uppercase'><CiUser className='h-6 w-6 text-gray-700' /></Link>
           <button onClick={handleDrawerToggle} className='relative hover:text-black'>
             <CiShoppingCart className='h-6 w-6 text-gray-700' />
             <span className='absolute -top-1 bg-buyit-red text-white text-xs rounded-full px-1.5 py-0.5'>4</span>
