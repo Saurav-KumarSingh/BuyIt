@@ -18,4 +18,14 @@ const isLoggedIn = async (req, res, next) => {
     }
 }
 
-module.exports = {isLoggedIn};
+//to check user is Admin or not
+
+const admin=(req,res,next)=>{
+    if(req.user && req.user.role==="admin"){
+        next();
+    }else{
+        res.status(403).json({message:"Not authorized as an Admin"})
+    }
+}
+
+module.exports = {isLoggedIn,admin};
