@@ -113,12 +113,6 @@ const productSchema = new mongoose.Schema({
   },
 },{timestamps:true});
 
-// Middleware to automatically update the updatedAt timestamp on save
-productSchema.pre('save', function(next) {
-  this.updatedAt = new Date();
-  next();
-});
-
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;

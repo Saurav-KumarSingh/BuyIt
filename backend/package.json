@@ -4,7 +4,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node bckend/server.js",
-    "dev": "nodemon bckend/server.js"
+    "dev": "nodemon bckend/server.js",
+    "seed": "node seeder.js"
   },
   "keywords": [],
   "author": "",
