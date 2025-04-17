@@ -86,7 +86,23 @@ router.get("/best-seller", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching best-selling product." });
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+//get new-arrivals product based on recent date
+
+router.get("/new-arrivals", async (req, res) => {
+  try {
+    const newArrivals = await Product.find().sort({ createdAt: -1 }).limit(8);//sort in desc
+    if (newArrivals) {
+      res.json(newArrivals);
+    } else {
+      res.status(404).json({ message: "No new-arrivals product found." });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 });
 
