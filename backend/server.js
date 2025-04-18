@@ -4,6 +4,7 @@ const dotenv=require("dotenv");
 const db=require("./config/db")
 const userRoute=require("./routes/userRoutes");
 const productRoute=require("./routes/productRoutes");
+const cartRoute=require("./routes/cartRoutes");
 
 const app = express();
 app.use(express.json());
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use('/api/users/',userRoute);
 app.use('/api/products/',productRoute);
+app.use('/api/cart/',cartRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
