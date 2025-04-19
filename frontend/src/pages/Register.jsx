@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import loginImage from "../assets/login.webp";
 
+import { registerUser } from '../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
+
 const Register = () => {
+    const dispatch = useDispatch();
+
     const [data, setData] = useState({
         name: "",
         email: "",
@@ -15,7 +20,7 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Registration Data:", data);
+        dispatch(registerUser(data));
     };
 
     return (
