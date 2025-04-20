@@ -5,6 +5,7 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import Searchbar from './Searchbar';
 import CartDrawer from '../Layout/CartDrawer';
 import { RxCross2 } from "react-icons/rx";
+import Logo from './Logo';
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -19,7 +20,7 @@ const Navbar = () => {
     <>
       <nav className='container mx-auto flex items-center justify-between py-3 px-5'>
         {/* logo */}
-        <div><Link to='/' className='text-2xl font-medium'>BuyIt</Link></div>
+        <div><Link to='/' className='text-2xl font-medium'><Logo className='md:h-14 h-8 '/></Link></div>
         {/* center navlink */}
         <div className='hidden md:flex space-x-6'>
           <Link to="collections/all" className='text-gray-700 hover:text-black text-sm uppercase'>Men</Link>
