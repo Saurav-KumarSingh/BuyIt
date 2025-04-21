@@ -8,7 +8,7 @@ const userFromStorage = localStorage.getItem("userInfo")
 
 // Check for an existing guest ID in the localStorage or generate a new one
 const initialGuestId =
-    localStorage.getItem("guestId") || `guest_${new Date().getTime()}`;
+    localStorage.getItem("guestId") || `guest_${Date.now()}`; // ✅ FIXED
 localStorage.setItem("guestId", initialGuestId);
 
 // Initial state
@@ -18,7 +18,6 @@ const initialState = {
     loading: false,
     error: null,
 };
-
 
 // Async Thunk for User Login
 export const loginUser = createAsyncThunk(
@@ -31,13 +30,14 @@ export const loginUser = createAsyncThunk(
             );
             localStorage.setItem("userInfo", JSON.stringify(response.data.user));
             localStorage.setItem("userToken", response.data.token);
-            return response.data.user; // Return the user object from the response
+            return response.data.user;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(
+                error.response?.data || { message: "Login failed. Please try again." }
+            );
         }
     }
 );
-
 
 // Async Thunk for User Register
 export const registerUser = createAsyncThunk(
@@ -50,32 +50,31 @@ export const registerUser = createAsyncThunk(
             );
             localStorage.setItem("userInfo", JSON.stringify(response.data.user));
             localStorage.setItem("userToken", response.data.token);
-            return response.data.user; // Return the user object from the response
+            return response.data.user;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(
+                error.response?.data || { message: "Registration failed. Please try again." }
+            );
         }
     }
 );
 
-
-// Slice 
-
-const authSlice=createSlice({
-    name:"auth",
+// Slice
+const authSlice = createSlice({
+    name: "auth",
     initialState,
-    reducers:{
-        logout:(state)=>{
-            state.user=null;
-            state.guestId=`guest_${new Date.getTime()}`;
+    reducers: {
+        logout: (state) => {
+            state.user = null;
+            state.guestId = `guest_${Date.now()}`; // ✅ FIXED
             localStorage.removeItem("userInfo");
             localStorage.removeItem("userToken");
-            localStorage.setItem("guestId",state.guestId);
+            localStorage.setItem("guestId", state.guestId);
         },
-        generateNewGuestId:(state)=>{
-            state.guestId=`guest_${new Date.getTime()}`;
-            localStorage.setItem("guestId",state.guestId);
-
-        }
+        generateNewGuestId: (state) => {
+            state.guestId = `guest_${Date.now()}`; // ✅ FIXED
+            localStorage.setItem("guestId", state.guestId);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -91,7 +90,6 @@ const authSlice=createSlice({
                 state.loading = false;
                 state.error = action.payload?.message || action.error.message;
             })
-    
             .addCase(registerUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -104,9 +102,8 @@ const authSlice=createSlice({
                 state.loading = false;
                 state.error = action.payload?.message || action.error.message;
             });
-    }    
+    },
 });
 
-
-export const {logout, generateNewGuestId}=authSlice.actions;
+export const { logout, generateNewGuestId } = authSlice.actions;
 export default authSlice.reducer;

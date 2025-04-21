@@ -6,6 +6,7 @@ import Searchbar from './Searchbar';
 import CartDrawer from '../Layout/CartDrawer';
 import { RxCross2 } from "react-icons/rx";
 import Logo from './Logo';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -16,6 +17,9 @@ const Navbar = () => {
   const handleNavDrawerToggle = () => {
     setIsNavDrawerOpen(!isNavDrawerOpen);
   }
+
+  const {cart}=useSelector((state)=>state.cart);
+  const cartItemCount=cart?.products?.reduce((total,product)=>total + product.quantity,0) || 0;
   return (
     <>
       <nav className='container mx-auto flex items-center justify-between py-3 px-5'>
@@ -23,10 +27,11 @@ const Navbar = () => {
         <div><Link to='/' className='text-2xl font-medium'><Logo className='md:h-14 h-8 '/></Link></div>
         {/* center navlink */}
         <div className='hidden md:flex space-x-6'>
-          <Link to="collections/all" className='text-gray-700 hover:text-black text-sm uppercase'>Men</Link>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase'>Women</Link>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase'>Top wear</Link>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase'>Bottom Wear</Link>
+          <Link to="collections/all" className='text-gray-700 hover:text-black text-sm uppercase'>All</Link>
+          <Link to="collections/all/?gender=Men" className='text-gray-700 hover:text-black text-sm uppercase'>Men</Link>
+          <Link to="collections/all/?gender=Women" className='text-gray-700 hover:text-black text-sm uppercase'>Women</Link>
+          <Link to="collections/all/?category=Top Wear" className='text-gray-700 hover:text-black text-sm uppercase'>Top wear</Link>
+          <Link to="collections/all/?category=Bottom Wear" className='text-gray-700 hover:text-black text-sm uppercase'>Bottom Wear</Link>
         </div>
         {/* right icons */}
         <div className='flex items-center space-x-4'>
@@ -34,7 +39,7 @@ const Navbar = () => {
           <Link to="/profile" className='text-gray-700 hover:text-black text-sm uppercase'><CiUser className='h-6 w-6 text-gray-700' /></Link>
           <button onClick={handleDrawerToggle} className='relative hover:text-black'>
             <CiShoppingCart className='h-6 w-6 text-gray-700' />
-            <span className='absolute -top-1 bg-buyit-red text-white text-xs rounded-full px-1.5 py-0.5'>4</span>
+            {cartItemCount>0 &&<span className='absolute -top-1 bg-buyit-red text-white text-xs rounded-full px-1.5 py-0.5'>{cartItemCount}</span>}
           </button>
           {/* search */}
           <div className='overflow-hidden'><Searchbar /></div>
@@ -56,10 +61,11 @@ const Navbar = () => {
         </div>
         <h2 className='p-4 font-semibold'>Menu</h2>
         <nav className=' flex flex-col space-y-4 '>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Men</Link>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Women</Link>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Top wear</Link>
-          <Link to="#" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Bottom Wear</Link>
+          <Link to="collections/all" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>All</Link>
+          <Link to="collections/all/?gender=Men" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Men</Link>
+          <Link to="collections/all/?gender=Women" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Women</Link>
+          <Link to="collections/all/?category=Top Wear" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Top wear</Link>
+          <Link to="collections/all/?category=Bottom Wear" className='text-gray-700 hover:text-black text-sm uppercase hover:bg-gray-100 p-4'>Bottom Wear</Link>
           {/* <Link to="/admin" className='inline-block bg-black px-2 rounded text-sm text-white'>Admin</Link> */}
 
         </nav>

@@ -107,7 +107,7 @@ router.put("/", async (req, res) => {
 
             if (productIndex > -1) {
                 // Update quantity
-                cart.products[productIndex].quantity += quantity;
+                cart.products[productIndex].quantity = quantity;
             } else {
                 cart.products.splice(productIndex, 1); //remove product, if quantity is zero
             }

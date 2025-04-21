@@ -79,20 +79,20 @@ const adminProductSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAdminProducts.pending, (state) => {
+            .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchAdminProducts.fulfilled, (state, action) => {
+            .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.loading = true;
                 state.products = action.payload;
             })
-            .addCase(fetchAdminProducts.rejected, (state, action) => {
+            .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = true;
                 state.error = action.error.message;
 
             })
             // Create a product 
-            .addCase(fetchAdminProducts.fulfilled, (state, action) => {
+            .addCase(createProduct.fulfilled, (state, action) => {
                 state.loading = false;
                 state.products.push(action.payload);
             })

@@ -1,43 +1,39 @@
-import React from 'react'
-
-const checkout = {
-    _id: "12323",
-    createdAt: new Date(),
-    checkoutItems: [
-        {
-            productId: "1",
-            name: "Jacket",
-            color: "black",
-            size: "M",
-            price: 150,
-            quantity: 1,
-            image: "https://picsum.photos/150?random=1",
-        },
-        {
-            productId: "2",
-            name: "T-shirt",
-            color: "black",
-            size: "M",
-            price: 150,
-            quantity: 1,
-            image: "https://picsum.photos/150?random=2",
-        },
-    ],
-    shippingAddress: {
-        address: "123 Fashion Street",
-        city: "Hollywood",
-        country: "USA"
-    }
-};
-
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { clearCart } from '../redux/slices/cartSlice';
 
 const OrderConfirmationPage = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { checkout } = useSelector((state) => state.checkout);
 
+    // Format date to DD/MM/YYYY
+    const formatDateToDDMMYYYY = (dateStr) => {
+        const date = new Date(dateStr);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    // Calculate estimated delivery (10 days from createdAt)
     const calculateEstimatedDelivery = (createdAt) => {
         const orderDate = new Date(createdAt);
         orderDate.setDate(orderDate.getDate() + 10);
-        return orderDate.toLocaleDateString();
-    }
+        return formatDateToDDMMYYYY(orderDate);
+    };
+
+    // Clear the cart when order is confirmed
+    useEffect(() => {
+        if (checkout && checkout._id) {
+            dispatch(clearCart());
+            localStorage.removeItem("cart");
+        } else {
+            navigate("/my-order");
+        }
+    }, [checkout, dispatch, navigate]);
+
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white">
             <h1 className="text-4xl font-bold text-center text-emerald-700 mb-8">
@@ -53,7 +49,7 @@ const OrderConfirmationPage = () => {
                                 Order ID: {checkout._id}
                             </h2>
                             <p className='text-gray-500'>
-                                Order date: {new Date(checkout.createdAt).toLocaleDateString()}
+                                Order date: {formatDateToDDMMYYYY(checkout.createdAt)}
                             </p>
                         </div>
                         {/* Estimated Delivery */}
@@ -63,13 +59,14 @@ const OrderConfirmationPage = () => {
                             </p>
                         </div>
                     </div>
-                    {/* Ordered items  */}
+
+                    {/* Ordered items */}
                     <div className="mb-20">
                         {checkout.checkoutItems.map((item) => (
                             <div key={item.productId} className="item items-center mb-4 flex border-b-2 pb-2">
-                                <div>
+                                <div className="flex items-center">
                                     <img src={item.image} alt={item.name} className='w-16 h-16 object-cover rounded-md mr-4' />
-                                    <div >
+                                    <div>
                                         <h4 className="text-base font-semibold">{item.name}</h4>
                                         <p className='text-sm text-gray-500 '>
                                             {item.color} | {item.size}
@@ -83,6 +80,7 @@ const OrderConfirmationPage = () => {
                             </div>
                         ))}
                     </div>
+
                     {/* Payment and Delivery Info */}
                     <div className="grid grid-cols-2 gap-8">
                         {/* Payment Info */}
@@ -91,7 +89,7 @@ const OrderConfirmationPage = () => {
                             <p className="text-gray-600">PayPal</p>
                         </div>
 
-                        {/*delivery information*/}
+                        {/* Delivery Info */}
                         <div>
                             <h4 className="text-lg font-semibold mb-2">Delivery</h4>
                             <p className="text-gray-600">
@@ -105,7 +103,7 @@ const OrderConfirmationPage = () => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default OrderConfirmationPage
+export default OrderConfirmationPage;

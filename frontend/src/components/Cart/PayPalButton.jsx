@@ -17,14 +17,14 @@ const PayPalButton = ({ amount, onSuccess, onError }) => {
           return actions.order.create({
             purchase_units: [
               {
-                amount: { value: amount.toString() },
+                amount: { value: parseFloat(amount).toFixed(2).toString() },
               },
             ],
           });
         }}
         onApprove={(data, actions) => {
           return actions.order.capture().then((details) => {
-            console.log("✅ Payment Approved:", details);
+            // console.log("✅ Payment Approved:", details);
             if (onSuccess) onSuccess(details);
           });
         }}

@@ -217,7 +217,6 @@ router.delete("/:id", isLoggedIn, admin, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const { collection, size, color, gender, minPrice, maxPrice, sortBy, search, category, material, brand, limit } = req.query;
-
     let query = {};
 
     // Filter logic
@@ -263,6 +262,7 @@ router.get("/", async (req, res) => {
     }
 
     // Sort Logic
+    let sort = {};
     if (sortBy) {
       switch (sortBy) {
         case "priceAsc":
@@ -280,7 +280,6 @@ router.get("/", async (req, res) => {
     }
 
     // Fetch products and apply sorting and limit
-    let sort = {};
     let products = await Product.find(query)
       .sort(sort)
       .limit(Number(limit) || 0);

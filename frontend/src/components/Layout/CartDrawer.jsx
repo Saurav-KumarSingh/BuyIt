@@ -2,16 +2,24 @@ import React from 'react'
 import { RxCross2 } from "react-icons/rx";
 import CartContents from '../Cart/CartContents';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const CartDrawer = ({ isDrawerOpen, handleDrawerToggle }) => {
+  const navigate = useNavigate(); 
+  const { user, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart); // ✅ FIXED: pull cart from correct slice
 
-  const navigate=useNavigate(); 
+  const userId = user ? user._id : null;
 
-  const handleCheckout=()=>{
-    navigate("/checkout")
+  const handleCheckout = () => {
+    if (!user) {
+      navigate("/login?redirect=checkout");
+    } else {
+      navigate("/checkout");
+    }
     handleDrawerToggle();
-    
-  }
+  };
+
   return (
     <>
       <div className={`fixed top-0 right-0 w-1/1 sm:w-1/2 md:w-2/5 lg:1/4 h-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col z-990 ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}>
@@ -21,11 +29,15 @@ const CartDrawer = ({ isDrawerOpen, handleDrawerToggle }) => {
             <RxCross2 className="h-5 w-5" />
           </button>
         </div>
-        {/* card content */}
+
+        {/* cart content */}
         <div className="flex-grow p-4 overflow-y-auto ">
           <h2 className='text-xl font-semibold mb-4'>Your Cart</h2>
-          {/* cart components */}
-          <CartContents />
+          {
+            cart?.products?.length > 0 
+              ? <CartContents cart={cart} userId={userId} guestId={guestId} />
+              : <p className="text-center text-xl font-semibold text-gray-600 mt-20">Your cart is empty</p>
+          }
         </div>
 
         {/* checkout button */}
@@ -35,7 +47,7 @@ const CartDrawer = ({ isDrawerOpen, handleDrawerToggle }) => {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default CartDrawer
+export default CartDrawer;

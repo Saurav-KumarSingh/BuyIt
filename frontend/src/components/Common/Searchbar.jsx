@@ -1,16 +1,24 @@
 import React, { useState } from 'react'
 import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchFilteredProducts, setFilters } from '../../redux/slices/productSlice';
 
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isOpen, setIsOpen] = useState(false);
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
+
     const handleSearchToggle = () => {
         setIsOpen(!isOpen);
     }
     const handleSearch = (e) => {
         e.preventDefault(); 
-        console.log("search term: " + searchTerm);
+        dispatch(setFilters({search:searchTerm}));
+        dispatch(fetchFilteredProducts({search:searchTerm}));
+        navigate(`/collections/all?search=${searchTerm}`)
         setIsOpen(false);
         setSearchTerm("");
     };

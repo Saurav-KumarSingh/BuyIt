@@ -3,9 +3,24 @@ import { FaFilter } from "react-icons/fa";
 import FilterSidebar from '../components/Products/FilterSidebar';
 import SortOptions from '../components/Products/SortOptions';
 import ProductGrid from '../components/Products/ProductGrid';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux"
+import { fetchFilteredProducts } from '../redux/slices/productSlice';
+
 
 const CollectionPage = () => {
-    const [products, setProducts] = useState([]);
+
+    const { collection } = useParams();
+    const [searchParams] = useSearchParams();
+    const dispatch = useDispatch();
+    const { products, loading, error } = useSelector((state) => state.products);
+    const queryParams = Object.fromEntries([...searchParams]);
+
+
+    useEffect(() => {
+        dispatch(fetchFilteredProducts({ collection, ...queryParams }))
+    }, [dispatch, collection, searchParams]);
+
     const sidebarRef = useRef(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -30,74 +45,6 @@ const CollectionPage = () => {
         };
     }, []);
 
-    useEffect(() => {
-        const fetchedProducts = [
-            {
-                id: 1,
-                name: "Stylish Jacket",
-                price: 1200,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=10", altText: "Stylish Jacket" },
-                    { url: "https://picsum.photos/500/500?random=11", altText: "Stylish Jacket" },
-                ],
-            },
-            {
-                id: 2,
-                name: "Casual Hoodie",
-                price: 900,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=20", altText: "Casual Hoodie" },
-                    { url: "https://picsum.photos/500/500?random=21", altText: "Casual Hoodie" },
-                ],
-            },
-            {
-                id: 3,
-                name: "Denim Shirt",
-                price: 1100,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=30", altText: "Denim Shirt" },
-                    { url: "https://picsum.photos/500/500?random=31", altText: "Denim Shirt" },
-                ],
-            },
-            {
-                id: 4,
-                name: "Leather Boots",
-                price: 2500,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=40", altText: "Leather Boots" },
-                    { url: "https://picsum.photos/500/500?random=41", altText: "Leather Boots" },
-                ],
-            },
-            {
-                id: 5,
-                name: "Casual Hoodie",
-                price: 900,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=22", altText: "Casual Hoodie" },
-                    { url: "https://picsum.photos/500/500?random=23", altText: "Casual Hoodie" },
-                ],
-            },
-            {
-                id: 6,
-                name: "Denim Shirt",
-                price: 1100,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=24", altText: "Denim Shirt" },
-                    { url: "https://picsum.photos/500/500?random=25", altText: "Denim Shirt" },
-                ],
-            },
-            {
-                id: 7,
-                name: "Leather Boots",
-                price: 2500,
-                images: [
-                    { url: "https://picsum.photos/500/500?random=26", altText: "Leather Boots" },
-                    { url: "https://picsum.photos/500/500?random=27", altText: "Leather Boots" },
-                ],
-            },
-        ];
-        setProducts(fetchedProducts); // ✅ Now setting the products state
-    }, []);
 
     return (
         <div className="flex flex-col lg:flex-row">
@@ -121,7 +68,12 @@ const CollectionPage = () => {
                 <SortOptions />
 
                 {/* Product Grid */}
-                <ProductGrid products={products} />
+                {products.length > 0 ? (
+                    <ProductGrid products={products} loading={loading} error={error} />
+                ) : (
+                    <p className="text-center text-3xl font-semibold text-gray-600 mt-20">No Products Available</p>
+                )}
+
             </div>
         </div>
     );

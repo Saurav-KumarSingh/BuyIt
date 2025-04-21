@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const FilterSidebar = () => {
@@ -13,10 +13,10 @@ const FilterSidebar = () => {
         material: [],
         brand: [],
         minPrice: 0,
-        maxPrice: 1000
+        maxPrice: 10000,
     });
 
-    const [priceRange, setPriceRange] = useState([0, 1000]);
+    const [priceRange, setPriceRange] = useState([0, 10000]);
 
     const categories = ["Top Wear", "Bottom Wear"];
     const colors = ["Red", "Blue", "Black", "Green", "Yellow", "Gray", "White", "Pink", "Beige", "Navy"];
@@ -29,7 +29,7 @@ const FilterSidebar = () => {
     useEffect(() => {
         const params = Object.fromEntries([...searchParams]);
         const min = +params.minPrice || 0;
-        const max = +params.maxPrice || 1000;
+        const max = +params.maxPrice || 10000;
 
         const updatedFilters = {
             category: params.category || "",
@@ -46,7 +46,7 @@ const FilterSidebar = () => {
         setPriceRange([min, max]);
     }, [searchParams]);
 
-    const updateURLParams = (newFilters) => {
+    const updateURLParams = useCallback((newFilters) => {
         const params = new URLSearchParams();
 
         Object.keys(newFilters).forEach((key) => {
@@ -60,12 +60,11 @@ const FilterSidebar = () => {
         });
 
         setSearchParams(params);
-        navigate(`?${params.toString()}`); // ✅ FIXED: properly calling toString()
-    };
+        navigate(`?${params.toString()}`);
+    }, [navigate, setSearchParams]);
 
-    const handleFilterChange = (e) => {
+    const handleFilterChange = useCallback((e) => {
         const { name, value, checked, type } = e.target;
-
         let newFilters = { ...filters };
 
         if (type === 'checkbox') {
@@ -80,17 +79,17 @@ const FilterSidebar = () => {
 
         setFilters(newFilters);
         updateURLParams(newFilters);
-    };
+    }, [filters, updateURLParams]);
 
-    const handleColorClick = (color) => {
+    const handleColorClick = useCallback((color) => {
         const updated = { ...filters, color };
         setFilters(updated);
         updateURLParams(updated);
-    };
+    }, [filters, updateURLParams]);
 
     return (
-        <div className='p-4'>
-            <h3 className='text-xl font-medium text-gray-800 mb-4'>Filter</h3>
+        <div className="p-4">
+            <h3 className="text-xl font-medium text-gray-800 mb-4">Filter</h3>
 
             {/* Category Filter */}
             <div className="mb-6">
@@ -99,13 +98,14 @@ const FilterSidebar = () => {
                     <div key={category} className="flex items-center mb-1">
                         <input
                             type="radio"
-                            name='category'
-                            className='mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer'
+                            name="category"
+                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer"
                             value={category}
                             checked={filters.category === category}
                             onChange={handleFilterChange}
+                            aria-label={`Filter by ${category}`}
                         />
-                        <span className='text-gray-700'>{category}</span>
+                        <span className="text-gray-700">{category}</span>
                     </div>
                 ))}
             </div>
@@ -117,13 +117,14 @@ const FilterSidebar = () => {
                     <div key={gender} className="flex items-center mb-1">
                         <input
                             type="radio"
-                            name='gender'
-                            className='mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer'
+                            name="gender"
+                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer"
                             value={gender}
                             checked={filters.gender === gender}
                             onChange={handleFilterChange}
+                            aria-label={`Filter by ${gender}`}
                         />
-                        <span className='text-gray-700'>{gender}</span>
+                        <span className="text-gray-700">{gender}</span>
                     </div>
                 ))}
             </div>
@@ -138,6 +139,7 @@ const FilterSidebar = () => {
                             className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105 ${filters.color === color ? 'ring-2 ring-blue-500' : ''}`}
                             style={{ backgroundColor: color.toLowerCase() }}
                             onClick={() => handleColorClick(color)}
+                            aria-label={`Filter by ${color}`}
                         />
                     ))}
                 </div>
@@ -150,13 +152,14 @@ const FilterSidebar = () => {
                     <div key={size} className="flex items-center mb-1">
                         <input
                             type="checkbox"
-                            name='size'
-                            className='mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer'
+                            name="size"
+                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer"
                             value={size}
                             checked={filters.size.includes(size)}
                             onChange={handleFilterChange}
+                            aria-label={`Filter by size ${size}`}
                         />
-                        <span className='text-gray-700'>{size}</span>
+                        <span className="text-gray-700">{size}</span>
                     </div>
                 ))}
             </div>
@@ -168,13 +171,14 @@ const FilterSidebar = () => {
                     <div key={material} className="flex items-center mb-1">
                         <input
                             type="checkbox"
-                            name='material'
-                            className='mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer'
+                            name="material"
+                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer"
                             value={material}
                             checked={filters.material.includes(material)}
                             onChange={handleFilterChange}
+                            aria-label={`Filter by material ${material}`}
                         />
-                        <span className='text-gray-700'>{material}</span>
+                        <span className="text-gray-700">{material}</span>
                     </div>
                 ))}
             </div>
@@ -186,13 +190,14 @@ const FilterSidebar = () => {
                     <div key={brand} className="flex items-center mb-1">
                         <input
                             type="checkbox"
-                            name='brand'
-                            className='mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer'
+                            name="brand"
+                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 cursor-pointer"
                             value={brand}
                             checked={filters.brand.includes(brand)}
                             onChange={handleFilterChange}
+                            aria-label={`Filter by brand ${brand}`}
                         />
-                        <span className='text-gray-700'>{brand}</span>
+                        <span className="text-gray-700">{brand}</span>
                     </div>
                 ))}
             </div>
@@ -200,27 +205,32 @@ const FilterSidebar = () => {
             {/* Price Range Filter */}
             <div className="mb-8">
                 <label className="block text-gray-600 font-medium mb-2">Price Range</label>
-                <input
-                    type="range"
-                    name='priceRange'
-                    min={0}
-                    max={1000}
-                    value={priceRange[1]}
-                    onChange={(e) => {
-                        const value = Number(e.target.value);
-                        setPriceRange([priceRange[0], value]);
 
-                        const updated = { ...filters, maxPrice: value };
-                        setFilters(updated);
-                        updateURLParams(updated);
-                    }}
-                    className='w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer'
-                />
-                <div className="flex justify-between text-gray-600 mt-2">
-                    <span>₹{priceRange[0]}</span>
-                    <span>₹{priceRange[1]}</span>
+                <div className="w-[150px] max-w-sm">
+                    <input
+                        type="range"
+                        name="priceRange"
+                        min={0}
+                        max={10000}
+                        value={priceRange[1]}
+                        onChange={(e) => {
+                            const value = Number(e.target.value);
+                            setPriceRange([priceRange[0], value]);
+
+                            const updated = { ...filters, maxPrice: value };
+                            setFilters(updated);
+                            updateURLParams(updated);
+                        }}
+                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                        aria-label="Set price range"
+                    />
+                    <div className="flex justify-between text-gray-600 mt-2 text-sm">
+                        <span>₹{priceRange[0]}</span>
+                        <span>₹{priceRange[1]}</span>
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 };
