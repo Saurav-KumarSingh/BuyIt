@@ -22,8 +22,9 @@ dotenv.config();
 db();
 
 app.get("/", (req, res) => {
-  res.send("WELCOME TO RABBIT API!");
+  res.send("WELCOME TO BuyIt API!");
 });
+
 
 // API routes
 app.use("/api/users/", userRoute);
