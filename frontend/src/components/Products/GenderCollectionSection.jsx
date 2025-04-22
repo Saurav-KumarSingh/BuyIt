@@ -1,6 +1,6 @@
 import React from 'react'
-import mensCollectionImg from '../../assets/mens-collection.webp';
-import womensCollectionImg from '../../assets/womens-collection.webp';
+import mensCollectionImg from '../../assets/mens-collections.webp';
+import womensCollectionImg from '../../assets/girl-collection.webp';
 import { Link } from 'react-router-dom';
 
 

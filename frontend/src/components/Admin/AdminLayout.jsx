@@ -23,7 +23,7 @@ const AdminLayout = () => {
             {isSidebarOpen && (<div className="fixed inset-0 z-10 bg-black bg-opacity-20 md:hidden" onClick={toggleSidebar}></div>)}
 
             <div
-                className={`bg-gray-900 w-64 min-h-screen text-white absolute md:relative transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                className={`bg-gray-800 w-64 min-h-screen text-white absolute md:relative transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     } transition-transform duration-300 md:translate-x-0 md:static md:block z-20`}
             >
                 {/* Sidebar */}

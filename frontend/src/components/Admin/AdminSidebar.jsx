@@ -3,6 +3,7 @@ import { FaBoxOpen, FaUsers, FaClipboardList, FaStore, FaSignOutAlt } from "reac
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
 import { clearCart } from "../../redux/slices/cartSlice";
+import Logo from "../Common/Logo";
 
 const AdminSidebar = () => {
   const navItems = [
@@ -24,7 +25,7 @@ const AdminSidebar = () => {
     <div className="p-6">
       <div className="mb-6">
         <Link to="/admin" className="text-2xl font-medium">
-          BuyIt
+          <Logo className="h-12"/>
         </Link>
       </div>
       <h2 className="text-xl font-medium mb-6 text-center">Admin Dashboard</h2>
