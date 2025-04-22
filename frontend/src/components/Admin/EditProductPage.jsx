@@ -76,7 +76,7 @@ const EditProductPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateProduct({ id, productData }));
+    dispatch(updateProduct({ id, productData }))
     toast.success("Product Updated Successfully",{duration:5000})
     navigate("/admin/products");
   };

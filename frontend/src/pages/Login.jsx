@@ -3,14 +3,16 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import loginImage from "../assets/login.webp";
 
 import { loginUser } from '../redux/slices/authSlice';
-import { mergeCart } from '../redux/slices/cartSlice'; // ✅ ADD THIS IMPORT
+import { mergeCart } from '../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'sonner';
+import { IoMdEye, IoMdEyeOff } from "react-icons/io"; // Importing icons
 
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, guestId } = useSelector((state) => state.auth);
+    const { user, guestId, loading } = useSelector((state) => state.auth);
     const { cart } = useSelector((state) => state.cart);
 
     const redirect = new URLSearchParams(location.search).get("redirect") || "/";
@@ -26,12 +28,15 @@ const Login = () => {
                 navigate(isCheckoutRedirect ? "/checkout" : "/");
             }
         }
-    }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]); 
+    }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
 
     const [data, setData] = useState({
         email: "",
         password: ""
     });
+
+    // State for toggling password visibility
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -39,8 +44,17 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(loginUser(data));
-        // ✅ Optional: You can also chain `.unwrap()` and show toast or errors
+        try {
+            dispatch(loginUser(data)).unwrap();
+            toast.success("Logged in successfully", { duration: 5000 });
+        } catch (error) {
+            toast.error("Login failed. Please try again.", { duration: 5000 });
+        }
+    };
+
+    // Toggle password visibility
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -64,10 +78,10 @@ const Login = () => {
                             required
                         />
                     </div>
-                    <div className='mb-4'>
+                    <div className='mb-4 relative'>
                         <label className='block text-sm font-semibold mb-2'>Password</label>
                         <input
-                            type='password'
+                            type={showPassword ? 'text' : 'password'}  // Toggle password visibility
                             name='password'
                             value={data.password}
                             onChange={handleChange}
@@ -75,13 +89,20 @@ const Login = () => {
                             placeholder='Enter your password'
                             required
                         />
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility} // Toggle visibility
+                            className="absolute right-3 bottom-2.5 text-gray-500"
+                        >
+                            {showPassword ? <IoMdEyeOff className='text-xl' /> : <IoMdEye className='text-xl' />}
+                        </button>
                     </div>
                     <button
                         type='submit'
                         onClick={handleSubmit}
                         className='w-full bg-black text-white p-2 rounded-md font-semibold hover:bg-gray-800 transition duration-200'
                     >
-                        Login
+                        {loading ? "Loading..." : "Login"}
                     </button>
                     <div className="mt-6 text-center text-sm flex justify-center gap-2">
                         <p>Don't have an account?</p>

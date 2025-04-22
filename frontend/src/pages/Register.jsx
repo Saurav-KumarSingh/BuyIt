@@ -5,13 +5,14 @@ import loginImage from "../assets/login.webp";
 import { registerUser } from '../redux/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { mergeCart } from '../redux/slices/cartSlice';
+import { IoMdEye, IoMdEyeOff } from "react-icons/io"; // Importing icons
 
 const Register = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, guestId } = useSelector((state) => state.auth);
+    const { user, guestId,loading } = useSelector((state) => state.auth);
     const { cart } = useSelector((state) => state.cart);
 
     const redirect = new URLSearchParams(location.search).get("redirect") || "/";
@@ -27,8 +28,7 @@ const Register = () => {
                 navigate(isCheckoutRedirect ? "/checkout" : "/");
             }
         }
-    }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]); // ✅ FIXED: removed syntax error
-
+    }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
 
     const [data, setData] = useState({
         name: "",
@@ -36,13 +36,25 @@ const Register = () => {
         password: ""
     });
 
+    const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(registerUser(data));
+        try {
+            await dispatch(registerUser(data)).unwrap();
+            toast.success("Registration successful!", { duration: 5000 });
+        } catch (err) {
+            toast.error("Registration failed. Please try again.", { duration: 5000 });
+        }
+    };
+
+    // Toggle password visibility
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -84,11 +96,11 @@ const Register = () => {
                         />
                     </div>
 
-                    {/* Password Field */}
-                    <div className='mb-4'>
+                    {/* Password Field with Toggle */}
+                    <div className='mb-4 relative'>
                         <label className='block text-sm font-semibold mb-2'>Password</label>
                         <input
-                            type='password'
+                            type={showPassword ? 'text' : 'password'}  // Toggle between text and password type
                             name='password'
                             value={data.password}
                             onChange={handleChange}
@@ -96,8 +108,14 @@ const Register = () => {
                             placeholder='Enter your password'
                             required
                         />
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility}  // Toggle password visibility
+                            className="absolute right-3 bottom-2.5 text-gray-500"
+                        >
+                            {showPassword ? <IoMdEyeOff className='text-xl' /> : <IoMdEye className='text-xl' />}
+                        </button>
                     </div>
-
 
                     {/* Register Button */}
                     <button
@@ -105,7 +123,7 @@ const Register = () => {
                         onClick={handleSubmit}
                         className='w-full bg-black text-white p-2 rounded-md font-semibold hover:bg-gray-800 transition duration-200'
                     >
-                        Register
+                        {loading ? "Loading...":"Register"}
                     </button>
 
                     {/* Already have an account? */}
@@ -119,7 +137,7 @@ const Register = () => {
             </div>
 
             {/* Image Section */}
-            <div className='hidden md:block w-1/2 bg-gray-800 '>
+            <div className='hidden md:block w-1/2 bg-gray-800'>
                 <div className='h-full flex flex-col justify-center items-center'>
                     <img src={loginImage} alt="Register Account" className='h-[650px] w-full object-cover' />
                 </div>
