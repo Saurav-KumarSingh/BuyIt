@@ -6,7 +6,7 @@ import Searchbar from './Searchbar';
 import CartDrawer from '../Layout/CartDrawer';
 import { RxCross2 } from "react-icons/rx";
 import Logo from './Logo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -17,6 +17,9 @@ const Navbar = () => {
   const handleNavDrawerToggle = () => {
     setIsNavDrawerOpen(!isNavDrawerOpen);
   }
+
+  const dispatch=useDispatch();
+  const {user}=useSelector((state)=>state.auth);
 
   const {cart}=useSelector((state)=>state.cart);
   const cartItemCount=cart?.products?.reduce((total,product)=>total + product.quantity,0) || 0;
@@ -35,7 +38,7 @@ const Navbar = () => {
         </div>
         {/* right icons */}
         <div className='flex items-center space-x-4'>
-          <Link to="/admin" className='block bg-black px-2 rounded text-sm text-white'>Admin</Link>
+          {user && user?.role==="admin" && <Link to="/admin" className='block bg-black px-2 rounded text-sm text-white'>Admin</Link>}
           <Link to="/profile" className='text-gray-700 hover:text-black text-sm uppercase'><CiUser className='h-6 w-6 text-gray-700' /></Link>
           <button onClick={handleDrawerToggle} className='relative hover:text-black'>
             <CiShoppingCart className='h-6 w-6 text-gray-700' />

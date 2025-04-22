@@ -1,37 +1,29 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom'
+import { fetchOrdersDetails } from '../redux/slices/orderSlice';
 
 const OrderDetailsPage = () => {
     const { id } = useParams();
-    const [orderDetails, setOrderDetails] = useState(null);
-    useEffect(() => {
-        const mockOrderDetails = {
-            _id: id,
-            createdAt: new Date(),
-            isPaid: true,
-            isDelivered: false,
-            paymentMethod: "PayPal",
-            shippingMethod: "Standard",
-            shippingAddress: { city: "New York", country: "IN" },
-            orderItems: [
-                {
-                    productId: "1",
-                    name: "Jacket",
-                    price: 150,
-                    quantity: 1,
-                    image: "https://picsum.photos/150?random=1",
-                },
-                {
-                    productId: "2",
-                    name: "T-shirt",
-                    price: 150,
-                    quantity: 1,
-                    image: "https://picsum.photos/150?random=2",
-                },
-            ]
-        }
-        setOrderDetails(mockOrderDetails);
-    }, [id])
+    const dispatch=useDispatch();
+    const {orderDetails,loading,error}=useSelector((state)=>state.orders);
+
+    useEffect(()=>{
+        dispatch(fetchOrdersDetails(id));
+    },[dispatch,id]);
+
+    const formatDateToDDMMYYYY = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+
+
     return (
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 ">Order Details</h2>
@@ -43,7 +35,7 @@ const OrderDetailsPage = () => {
                             Order ID: #{orderDetails._id}
                         </h3>
                         <p className=" text-gray-600">
-                            {new Date(orderDetails.createdAt).toLocaleDateString()}
+                            {formatDateToDDMMYYYY(orderDetails.createdAt)}
                         </p>
                     </div>
                     <div className="flex flex-col items-start sm:items-end mt-4 sm:mt-0">
@@ -103,7 +95,7 @@ const OrderDetailsPage = () => {
                                         </Link>
                                     </td>
                                     <td className='py-2 px-4'>₹{item.price}</td>
-                                    <td className='py-2 px-4'>₹{item.quantity}</td>
+                                    <td className='py-2 px-4'>{item.quantity}</td>
                                     <td className='py-2 px-4'>₹{item.price*item.quantity}</td>
                                 </tr>
                             ))}
