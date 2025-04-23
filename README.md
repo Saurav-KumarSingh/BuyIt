@@ -43,10 +43,6 @@
 
 Here’s a glimpse of **BuyIt** in action:
 
-## 🖼️ Screenshots
-
-Here’s a glimpse of **BuyIt** in action:
-
 <p align="center">
   <img src="./screenshots/hero.png" alt="Homepage" width="45%" height="250px" style="margin: 20px; object-fit: cover;" />
   <img src="./screenshots/auth.png" alt="Auth Page" width="45%" height="250px" style="margin: 20px; object-fit: cover;" />
