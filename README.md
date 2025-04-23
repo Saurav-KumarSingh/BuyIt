@@ -64,10 +64,6 @@ Here’s a glimpse of **BuyIt** in action:
 
 Follow the steps below to run this project locally.
 
----
-
-## 📦 Installation Instructions
-
 
 1️⃣ **Clone the repo:**  
 ```bash
