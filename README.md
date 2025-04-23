@@ -24,9 +24,9 @@
 ### Frontend
 - React.js
 - React Router DOM
-- Redux Toolkit (Optional)
+- Redux Toolkit 
 - Axios
-- TailwindCSS / Bootstrap (based on your design choice)
+- TailwindCSS
 
 ### Backend
 - Node.js
@@ -35,7 +35,7 @@
 - JWT (Authentication)
 - Bcrypt.js
 - Cloudinary
-- Stripe / PayPal SDK
+- PayPal
 
 ---
 
