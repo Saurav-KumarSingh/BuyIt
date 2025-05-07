@@ -19,7 +19,7 @@ app.use(express.json());
 const corsOptions = {
   origin: [
     "http://localhost:5173",                  // local frontend
-    // "https://buy-it-frontend.vercel.app",     
+    "https://buyit-self.vercel.app/",     
   ],
   credentials: true,
 };
