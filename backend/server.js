@@ -51,8 +51,9 @@ app.use("/api/admin/products/", productadminRoute);
 app.use("/api/admin/orders/", ordersadminRoute);
 
 // ❌ Don't listen to a port on Vercel
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
 
-// module.exports = app;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+module.exports = app;
