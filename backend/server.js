@@ -15,7 +15,15 @@ const ordersadminRoute = require("./routes/adminOrderRoute");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// ✅ CORS setup
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",                  // local frontend
+    // "https://buy-it-frontend.vercel.app",     
+  ],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 dotenv.config();
 
