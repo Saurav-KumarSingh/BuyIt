@@ -42,10 +42,10 @@ const Login = () => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit =async (e) => {
         e.preventDefault();
         try {
-            dispatch(loginUser(data)).unwrap();
+            await dispatch(loginUser(data)).unwrap();
             toast.success("Logged in successfully", { duration: 5000 });
         } catch (error) {
             toast.error("Login failed. Please try again.", { duration: 5000 });
