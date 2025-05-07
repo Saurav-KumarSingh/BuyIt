@@ -6,7 +6,7 @@
 ## 🌐 Live Demo
 
 Check out the live version of **BuyIt** here:  
-🔗 [https://buyit-demo.semo.com](https://buyit-self.vercel.app/)
+🔗 [https://buyit-self.vercel.app/](https://buyit-self.vercel.app/)
 
 ---
 
