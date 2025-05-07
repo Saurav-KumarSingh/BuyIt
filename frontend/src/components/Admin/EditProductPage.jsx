@@ -81,7 +81,7 @@ const EditProductPage = () => {
     navigate("/admin/products");
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return<div className="text-center py-4 text-xl text-gray-500">Loading...</div>;
   if (error) return <p>Error: {error}</p>;
 
   return (

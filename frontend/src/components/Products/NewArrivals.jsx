@@ -74,20 +74,23 @@ const NewArrivals = () => {
     const handleMouseUp = () => setIsDragging(false);
     const handleMouseLeave = () => setIsDragging(false);
 
-    const [newArrivals,setNewArrivals]=useState([]);
+    const [newArrivals, setNewArrivals] = useState([]);
+    const [loading, setLoading] = useState(true); // Loading state
 
-    useEffect(()=>{
-        const fetchNewArrivals=async () =>{
+    useEffect(() => {
+        const fetchNewArrivals = async () => {
             try {
-                const response=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`)
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`);
                 setNewArrivals(response.data);
+                setLoading(false); // Set loading to false once data is fetched
             } catch (error) {
                 console.error(error);
+                setLoading(false); // Set loading to false even if there's an error
             }
-        }
+        };
         fetchNewArrivals();
-    },[])
- 
+    }, []);
+
     return (
         <section>
             <div className="container mx-auto text-center mb-10 relative">
@@ -107,6 +110,11 @@ const NewArrivals = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Loading text */}
+            {loading && (
+                <div className="text-center py-4 text-xl text-gray-500">Loading new arrivals...</div>
+            )}
 
             {/* Scrollable Contents with Drag Feature */}
             <div 
