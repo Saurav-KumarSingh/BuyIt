@@ -3,6 +3,78 @@ const Product = require('../models/Product');
 const {isLoggedIn,admin} = require('../middleware/authMiddleWare');
 const router = express.Router();
 
+// @route POST /api/admin/products
+// @desc Create new Product
+// @access Private/Admin
+router.post("/", isLoggedIn, admin, async (req, res) => {
+  const {
+    name,
+    description,
+    price,
+    discountPrice,
+    countInStock,
+    sku,
+    category,
+    brand,
+    sizes,
+    colors,
+    collections,
+    material,
+    gender,
+    images,
+    isFeatured,
+    isPublished,
+    rating,
+    numReviews,
+    tags,
+    user,
+    metaTitle,
+    metaDescription,
+    metaKeywords,
+    dimensions,
+    weight,
+  } = req.body;
+
+  try {
+    const newProduct = new Product({
+      name,
+      description,
+      price,
+      discountPrice,
+      countInStock,
+      sku,
+      category,
+      brand,
+      sizes,
+      colors,
+      collections,
+      material,
+      gender,
+      images,
+      isFeatured,
+      isPublished,
+      rating,
+      numReviews,
+      tags,
+      user,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
+      dimensions,
+      weight,
+      user: req.user._id,
+    });
+
+    const createdProduct = await newProduct.save();
+    res.status(201).json(createdProduct);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
+
+
+});
+
 // @route GET /api/admin/products
 // @desc Get all products (Admin only)
 // @access Private/Admin

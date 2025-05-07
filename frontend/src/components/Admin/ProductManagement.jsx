@@ -4,71 +4,108 @@ import { Link } from 'react-router-dom';
 import { deleteProduct, fetchAdminProducts } from '../../redux/slices/adminProductSlice';
 
 const ProductManagement = () => {
+    const dispatch = useDispatch();
+    const { products, loading, error } = useSelector((state) => state.adminProducts);
 
-    const dispatch=useDispatch();
-    const {products,loading,error}=useSelector((state)=>state.adminProducts);
-
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchAdminProducts());
-    },[dispatch])
+    }, [dispatch]);
 
     const handleDelete = (productId) => {
-        if (window.confirm("Are you sure, you want to delete this Product?")) {
+        if (window.confirm("Are you sure you want to delete this product?")) {
             dispatch(deleteProduct(productId));
         }
-    }
-    
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-    
+    };
+
+    if (loading) return <div className="text-center text-gray-500 py-10">Loading products...</div>;
+    if (error) return <div className="text-center text-red-600 py-10">Error: {error}</div>;
+
     return (
-        <div className="max-w-7xl mx-auto p-6">
-            <h2 className="text-2xl font-bold mb-6">Product Management</h2>
-            <div className="overflow-x-auto shadow-md sm:rounded-lg">
-                <table className="min-w-full text-left text-gray-500">
-                    <thead className="bg-gray-100 text-xs uppercase text-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800">Product Management</h2>
+                <Link
+                    to="/admin/products/create"
+                    className="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
+                >
+                    + Add Product
+                </Link>
+            </div>
+
+            {/* Table View - only for extra large screens */}
+            <div className="hidden xl:block overflow-x-auto shadow ring-1 ring-gray-200 rounded-lg bg-white">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
                         <tr>
-                            <th className="py-3 px-4">Name</th>
-                            <th className="py-3 px-4">Price</th>
-                            <th className="py-3 px-4">SKU</th>
-                            <th className="py-3 px-4">Actions</th>
+                            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase">Name</th>
+                            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase">Price</th>
+                            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase">SKU</th>
+                            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {products.length > 0 ? (
-                            products.map((product) => (
-                                <tr key={product._id} className='border-b hover:bg-gray-50 cursor-pointer'>
-                                    <td className="p-4 font-medium text-gray-900 whitespace-nowrap">{product.name}</td>
-                                    <td className="p-4">₹{product.price}</td>
-                                    <td className="p-4">{product.sku}</td>
-                                    <td className="p-4 whitespace-nowrap">
-                                        <Link
-                                            to={`/admin/products/${product._id}/edit`}
-                                            className='inline-block bg-yellow-500 text-white px-3 py-1 rounded mr-2 hover:bg-yellow-600'
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(product._id)}
-                                            className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'
-                                        >
-                                            Delete
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-                            ))
-                        ) : (<tr>
-                            <td className="p-4 text-center text-gray-500">
-                                No Product found.
-                            </td>
-                        </tr>)}
+                    <tbody className="divide-y divide-gray-100">
+                        {products.length > 0 ? products.map(product => (
+                            <tr key={product._id} className="hover:bg-gray-50 transition">
+                                <td className="px-6 py-4 text-gray-800 font-medium">{product.name}</td>
+                                <td className="px-6 py-4 text-gray-700">₹{product.price}</td>
+                                <td className="px-6 py-4 text-gray-500">{product.sku}</td>
+                                <td className="px-6 py-4 space-x-2">
+                                    <Link
+                                        to={`/admin/products/${product._id}/edit`}
+                                        className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded"
+                                    >
+                                        Edit
+                                    </Link>
+                                    <button
+                                        onClick={() => handleDelete(product._id)}
+                                        className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        )) : (
+                            <tr>
+                                <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No products found.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
-        </div>
-    )
-}
 
-export default ProductManagement
+            {/* Card Grid View - for all screens below xl */}
+            <div className="xl:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {products.length > 0 ? products.map(product => (
+                    <div
+                        key={product._id}
+                        className="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between border border-gray-100 transition hover:shadow-lg"
+                    >
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+                            <p className="text-sm text-gray-600 mt-1">Price: ₹{product.price}</p>
+                            <p className="text-sm text-gray-500">SKU: {product.sku}</p>
+                        </div>
+                        <div className="mt-4 flex gap-2">
+                            <Link
+                                to={`/admin/products/${product._id}/edit`}
+                                className="flex-1 text-center bg-yellow-500 hover:bg-yellow-600 text-white text-sm py-2 rounded-md"
+                            >
+                                Edit
+                            </Link>
+                            <button
+                                onClick={() => handleDelete(product._id)}
+                                className="flex-1 text-center bg-red-500 hover:bg-red-600 text-white text-sm py-2 rounded-md"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                )) : (
+                    <p className="text-center text-gray-500 col-span-full">No products found.</p>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default ProductManagement;
