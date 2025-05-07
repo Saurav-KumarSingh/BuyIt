@@ -177,3 +177,23 @@ router.put("/:id", isLoggedIn, admin, async (req, res) => {
 
   
 module.exports=router;
+
+
+// delete route 
+
+router.delete("/:id", isLoggedIn, admin, async (req, res) => {
+  try {
+    // Find the product by ID
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+      await product.deleteOne()
+      res.json({ message: "Product Removed" });
+    } else {
+      return res.status(404).json({ message: 'Product not found.' });
+    }
+  } catch (error) {
+    console.error('Error Deleting product:', error);
+    res.status(500).json({ message: 'Server Error.', error: error.message });
+  }
+});
