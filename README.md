@@ -1,6 +1,12 @@
 # 🛒 BuyIt - Full Stack E-Commerce Web App
 
 **BuyIt** is a complete E-Commerce platform built using the **MERN** stack. It features secure authentication, product management, payment gateway integration, and cloud-based image handling. Whether you're shopping or managing the store, BuyIt provides a seamless experience for users and admins alike.
+---
+
+## 🌐 Live Demo
+
+Check out the live version of **BuyIt** here:  
+🔗 [https://buyit-demo.semo.com](https://buyit-self.vercel.app/)
 
 ---
 
