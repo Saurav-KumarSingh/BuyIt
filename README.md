@@ -16,12 +16,11 @@ Check out the live version of **BuyIt** here:
 - 🛍️ Product Listings with Filters and Categories
 - 🖼️ Image Upload via Cloudinary
 - 🛒 Add to Cart & Checkout
-- 💳 Payment Integration (Stripe/PayPal)
+- 💳 Payment Integration (PayPal)
 - 👨‍💼 Admin Dashboard (User & Product Management)
 - 🧾 Order Processing
 - 🔒 Protected Routes (Admin/User)
 - 📱 Responsive UI
-- 🔍 Product Search
 
 ---
 
